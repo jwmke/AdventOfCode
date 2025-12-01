@@ -8,13 +8,26 @@ def solve() -> int:
     sys.setrecursionlimit(200000)
     file = open('input.txt', 'r')
     read = file.readlines()
-    stripped = map(lambda s : s.replace("\n", ""), read)
-    t = 0
+    stripped = list(map(lambda s : s.replace("\n", ""), read))
+    current_pos = 50
+    inst = []
+    zero_count = 0
     for i, l in enumerate(stripped):
-        # TODO - Save Christmas
-        pass
+        inst.append((l[0], int(l[1:])))
 
-    return t
+    for lr, amount in inst:
+        if lr == "L":
+            current_pos -= amount
+            current_pos = current_pos % 100
+            if current_pos < 0:
+                current_pos = 100 - current_pos
+        elif lr == "R":
+            current_pos += amount
+            current_pos = current_pos % 100
+        if current_pos == 0:
+            zero_count+=1
+
+    return zero_count
 
 if __name__ == '__main__':
     print(solve())
