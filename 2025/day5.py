@@ -11,24 +11,39 @@ def solve() -> int:
     stripped = list(map(lambda s : s.replace("\n", ""), read))
     t = 0
     rl = []
-    rlf = True
-    il = []
     for i, l in enumerate(stripped):
         if l == "":
-            rlf = False
-            continue
-        if rlf == True:
-            a = l.split("-")
-            rl.append((int(a[0]), int(a[1])))
-        else:
-            il.append(int(l))
+            break
+        a = l.split("-")
+        rl.append((int(a[0]), int(a[1])))
     
-    for i in il:
-        for r in rl:
-            lb, hb = r
-            if i >= lb and i <= hb:
-                t+=1
-                break
+    mi, ma = math.inf, 0
+    for low, hi in rl:
+        if low < mi:
+            mi = low
+        if hi > ma:
+            ma = hi
+    
+    srl = sorted(rl)
+    fil = []
+
+    pl, ph = 0, 0
+    for i, lh in enumerate(srl):
+        cl, ch = lh
+        if i == 0:
+            pl, ph = cl, ch
+            continue
+        
+        if cl >= ph+1:
+            fil.append((pl, ph))
+            pl, ph = cl, ch
+        elif cl <= ph:
+            ph = max(ph,ch)
+
+    fil.append((pl, ph))
+    
+    for i in fil:
+        t+= i[1]-i[0]+1
 
     return t
 
