@@ -17,13 +17,6 @@ def solve() -> int:
         a = l.split("-")
         rl.append((int(a[0]), int(a[1])))
     
-    mi, ma = math.inf, 0
-    for low, hi in rl:
-        if low < mi:
-            mi = low
-        if hi > ma:
-            ma = hi
-    
     srl = sorted(rl)
     fil = []
 
@@ -41,7 +34,7 @@ def solve() -> int:
             ph = max(ph,ch)
 
     fil.append((pl, ph))
-    
+
     for i in fil:
         t+= i[1]-i[0]+1
 
