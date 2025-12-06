@@ -17,17 +17,72 @@ def solve() -> int:
     nl = nl[:-1]
 
     for i in range(len(ol)):
-        at = 0
-        mt = 1
+        cl = []
         for l in nl:
-            if ol[i] == "+":
-                at += int(l[i])
+            cl.append(l[i])
+        ncl = []
+        for l in cl:
+            nsl = []
+            if ol[i] == '+':
+                for j in range(4):
+                    if j < len(l):
+                        nsl.append(l[j])
+                    else:
+                        nsl.append('0')
+                ncl.append(''.join(nsl))
             else:
-                mt *= int(l[i])
-        if ol[i] == "+":
-            t+= at
+                ncl.append(l.zfill(4))
+            
+        print(ncl)
+        if ol[i] == '+':
+            ma = 0
+            for k in range(4):
+                cma = []
+                for j in range(len(ncl)):
+                    cma.append(ncl[j][k])
+                ncma = []
+                fn = False
+                for e in reversed(cma):
+                    if e != '0':
+                        fn = True
+                        ncma.append(e)
+                        continue
+                    if e == '0' and fn == False:
+                        continue
+                    ncma.append(e)
+
+                if len(ncma) == 0:
+                    print(cma)
+                else:
+                    ma+=int(''.join(reversed(ncma)))
+            print(ma)
+            t+=ma
         else:
-            t+=mt
+            ma = 1
+            for k in range(4):
+                cma = []
+                for j in range(len(ncl)):
+                    cma.append(ncl[j][k])
+                ncma = []
+                fn = False
+                for e in reversed(cma):
+                    if e != '0':
+                        fn = True
+                        ncma.append(e)
+                        continue
+                    if e == '0' and fn == False:
+                        continue
+                    ncma.append(e)
+
+                # print(list(reversed(ncma)))
+                # print(cma)
+                if len(ncma) == 0:
+                    print(cma)
+                    # pass
+                else:
+                    ma*=int(''.join(reversed(ncma)))
+            print(ma)
+            t+=ma
 
     return t
 
