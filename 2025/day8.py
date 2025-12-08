@@ -28,18 +28,11 @@ def solve() -> int:
     
     cl.sort(key=find_dist)
 
-    top = cl[:1000]
-
     G = nx.Graph()
-    for n in top:
+    for n in cl:
         G.add_edge(n[0], n[1])
-
-    # for x in nx.connected_components(G):
-    #     print(x)
-
-    sx = sorted(nx.connected_components(G), key=len, reverse=True)
-    
-    return(len(sx[0])*len(sx[1])*len(sx[2]))
+        if len(xyz) == len(sorted(nx.connected_components(G), key=len, reverse=True)[0]):
+            return (n[0][0]*n[1][0])
 
     # BAD - IGNORE
     # fp = []
