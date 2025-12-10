@@ -3,7 +3,7 @@ import sys
 import copy
 from collections import defaultdict
 import functools
-from itertools import combinations
+from z3 import *
 
 def solve() -> int:
     sys.setrecursionlimit(200000)
@@ -24,25 +24,48 @@ def solve() -> int:
         jolts.append(ll[-1][1:-1].split(","))
 
     for si in range(len(end_states)):
-        es = list(end_states[si])
         bs = buttons[si]
-        f = False
-        for i in range(1, len(bs)+1):
-            if f == True:
-                break
-            cc = combinations(bs, i)
-            for c in cc:
-                cs = ['.']*len(es)
-                for b in c:
-                    for bp in b:
-                        if cs[int(bp)] == '.':
-                            cs[int(bp)] = '#'
-                        elif cs[int(bp)] == '#':
-                            cs[int(bp)] = '.'
-                if es == cs:
-                    t+=len(c)
-                    f = True
-                    break
+        js = [int(x) for x in jolts[si]]
+    
+        vs = [Int(f'x{i}') for i in range(len(bs))]
+        
+        o = Optimize()
+
+        for v in vs:
+            o.add(v >= 0)
+
+        for i in range(len(js)):
+            co = []
+            
+            for bi in range(len(bs)):
+                if str(i) in bs[bi]:
+                    co.append(vs[bi])
+            
+            o.add(Sum(co) == js[i])
+        
+        o.minimize(Sum(vs))
+
+        if o.check() == sat:
+            model = o.model()
+            t += sum([model[v].as_long() for v in vs])
+
+        # f = False
+        # for i in range(1, len(bs)+1):
+        #     if f == True:
+        #         break
+        #     cc = combinations(bs, i)
+        #     for c in cc:
+        #         cs = ['.']*len(es)
+        #         for b in c:
+        #             for bp in b:
+        #                 if cs[int(bp)] == '.':
+        #                     cs[int(bp)] = '#'
+        #                 elif cs[int(bp)] == '#':
+        #                     cs[int(bp)] = '.'
+        #         if es == cs:
+        #             t+=len(c)
+        #             f = True
+        #             break
 
     return t
 
