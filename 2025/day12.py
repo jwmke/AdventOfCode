@@ -10,8 +10,25 @@ def solve() -> int:
     read = file.readlines()
     stripped = list(map(lambda s : s.replace("\n", ""), read))
     t = 0
+    sc = 0
+    al = []
+    nl = []
     for i, l in enumerate(stripped):
-        print(l)
+        if l == "":
+            sc +=1
+            continue
+        if sc == 6:
+            ll = l.split()
+            tl = ll[0].split("x")
+            al.append((int(tl[0]), int(tl[1][:-1])))
+            tn = 0
+            for n in ll[1:]:
+                tn += int(n)
+            nl.append(tn)
+
+    for i, a in enumerate(al):
+        if (a[0]/3)*(a[1]/3) >= nl[i]:
+            t+=1
 
     return t
 
